@@ -109,3 +109,37 @@ var projects = {
         }
     ]
 }
+
+/* Format and append header. TODO: Sanitize input from bio object. */
+var formattedName = HTMLheaderName.replace("%data%", bio.name);
+var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
+
+var formattedMobile = HTMLmobile.replace("%data%", bio.contacts.mobile);
+var formattedEmail = HTMLemail.replace("%data%", bio.contacts.email);
+var formattedGithub = HTMLgithub.replace("%data%", bio.contacts.github);
+var formattedTwitter = HTMLtwitter.replace("%data%", bio.contacts.twitter);
+var formattedLocation = HTMLlocation.replace("%data%", bio.contacts.location);
+
+var formattedBioPic = HTMLbioPic.replace("%data%", bio.biopic);
+var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
+
+$("#header").prepend(formattedRole);
+$("#header").prepend(formattedName);
+
+$("#topContacts").append(formattedMobile);
+$("#topContacts").append(formattedEmail);
+$("#topContacts").append(formattedGithub);
+$("#topContacts").append(formattedTwitter);
+$("#topContacts").append(formattedLocation);
+
+$("#header").append(formattedBioPic);
+$("#header").append(formattedWelcomeMsg);
+
+if (bio.skills.length > 0) {
+    $("#header").append(HTMLskillsStart);
+}
+
+bio.skills.forEach(function(skill) {
+    var formattedSkill = HTMLskills.replace("%data%", skill); // TODO sanitize input
+    $("#skills").append(formattedSkill);
+});
