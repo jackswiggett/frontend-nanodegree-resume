@@ -18,7 +18,7 @@ var bio = {
         "rock climbing",
         "footbag"
     ]
-}
+};
 
 var education = {
     "schools": [
@@ -45,7 +45,7 @@ var education = {
             "url": "http://www.udacity.com/"
         }
     ]
-}
+};
 
 var work = {
     jobs: [
@@ -74,7 +74,7 @@ var work = {
                            "non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         }
     ]
-}
+};
 
 var projects = {
     projects: [
@@ -88,7 +88,7 @@ var projects = {
                            "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat " +
                            "non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "images": [
-                "http://placekitten.com/200/300",
+                "http://placekitten.com/250/300",
                 "http://placekitten.com/400/300"
             ]
         },
@@ -103,57 +103,107 @@ var projects = {
                            "non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "images": [
                 "http://placekitten.com/250/250",
-                "http://placekitten.com/450/200",
-                "http://placekitten.com/600/500",
+                "http://placekitten.com/450/250",
+                "http://placekitten.com/200/250",
             ]
         }
     ]
+};
+
+/* Helper function to replace "%data%" in the template HTML provided by helper.js
+ * with a specific string. TODO: Sanitize the input in new_data. */
+function formatData(template_html, new_data) {
+    return template_html.replace("%data%", new_data);
 }
 
-/* Format and append header. TODO: Sanitize input from bio object. */
-var formattedName = HTMLheaderName.replace("%data%", bio.name);
-var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
+/* Format and append header. */
+bio.display = function() {
+    $("#header").prepend(formatData(HTMLheaderName, bio.name) +
+                         formatData(HTMLheaderRole, bio.role));
 
-var formattedMobile = HTMLmobile.replace("%data%", bio.contacts.mobile);
-var formattedEmail = HTMLemail.replace("%data%", bio.contacts.email);
-var formattedGithub = HTMLgithub.replace("%data%", bio.contacts.github);
-var formattedTwitter = HTMLtwitter.replace("%data%", bio.contacts.twitter);
-var formattedLocation = HTMLlocation.replace("%data%", bio.contacts.location);
+    $("#topContacts").append(formatData(HTMLmobile, bio.contacts.mobile) +
+                             formatData(HTMLemail, bio.contacts.email) +
+                             formatData(HTMLgithub, bio.contacts.github) +
+                             formatData(HTMLtwitter, bio.contacts.twitter) +
+                             formatData(HTMLlocation, bio.contacts.location));
 
-var formattedBioPic = HTMLbioPic.replace("%data%", bio.biopic);
-var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
+    $("#header").append(formatData(HTMLbioPic, bio.biopic) +
+                        formatData(HTMLwelcomeMsg, bio.welcomeMessage));
 
-$("#header").prepend(formattedName + formattedRole);
+    if (bio.skills.length > 0) {
+        $("#header").append(HTMLskillsStart);
 
-$("#topContacts").append(formattedMobile +
-                         formattedEmail +
-                         formattedGithub +
-                         formattedTwitter +
-                         formattedLocation);
+        bio.skills.forEach(function(skill) {
+            $("#skills").append(formatData(HTMLskills, skill));
+        });
+    }
+};
 
-$("#header").append(formattedBioPic +
-                    formattedWelcomeMsg);
+/* Format and append education history. */
+education.display = function() {
+    education.schools.forEach(function(school) {
+        $("#education").append(HTMLschoolStart);
+        $(".education-entry:last").append(formatData(HTMLschoolName, school.name) +
+                                          formatData(HTMLschoolDegree, school.degree) +
+                                          formatData(HTMLschoolDates, school.dates) +
+                                          formatData(HTMLschoolLocation, school.location));
 
-if (bio.skills.length > 0) {
-    $("#header").append(HTMLskillsStart);
+        school.majors.forEach(function(major) {
+            $(".education-entry:last").append(formatData(HTMLschoolMajor, major));
+        });
+    });
+};
+
+/* Format and append work history. */
+work.display = function() {
+    work.jobs.forEach(function(job) {
+        $("#workExperience").append(HTMLworkStart);
+        $(".work-entry:last").append(formatData(HTMLworkEmployer, job.employer) +
+                                     formatData(HTMLworkTitle, job.title) +
+                                     formatData(HTMLworkDates, job.dates) +
+                                     formatData(HTMLworkLocation, job.location) +
+                                     formatData(HTMLworkDescription, job.description));
+    });
+};
+
+/* Format and append project history. */
+projects.display = function() {
+    projects.projects.forEach(function(project) {
+        $("#projects").append(HTMLprojectStart);
+        $(".project-entry:last").append(formatData(HTMLprojectTitle, project.title) +
+                                        formatData(HTMLprojectDates, project.dates) +
+                                        formatData(HTMLprojectDescription, project.description));
+
+        project.images.forEach(function(image) {
+            $(".project-entry:last").append(formatData(HTMLprojectImage, image));
+        });
+    });
+};
+
+/* Call functions to display resume content. */
+bio.display();
+education.display();
+work.display();
+projects.display();
+
+/* Log document clicks */
+$(document).click(function(loc) {
+    logClicks(loc.pageX, loc.pageY);
+});
+
+/* Add internationalize button */
+function inName(name) {
+    firstAndLast = name.trim().split(" ");
+    first = firstAndLast[0];
+    last = firstAndLast[1];
+
+    first = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+    last = last.toUpperCase();
+
+    return first + " " + last;
 }
 
-bio.skills.forEach(function(skill) {
-    var formattedSkill = HTMLskills.replace("%data%", skill); // TODO sanitize input
-    $("#skills").append(formattedSkill);
-});
+$("#main").append(internationalizeButton)
 
-/* Format and append work history. TODO: Sanitize input from work object. */
-work.jobs.forEach(function(job) {
-    $("#workExperience").append(HTMLworkStart);
-    var formattedEmployer = HTMLworkEmployer.replace("%data%", job.employer);
-    var formattedTitle = HTMLworkTitle.replace("%data%", job.title);
-    var formattedDates = HTMLworkDates.replace("%data%", job.dates);
-    var formattedLocation = HTMLworkLocation.replace("%data%", job.location);
-    var formattedDescription = HTMLworkDescription.replace("%data%", job.description);
-    $(".work-entry:last").append(formattedEmployer +
-                                 formattedTitle +
-                                 formattedDates +
-                                 formattedLocation +
-                                 formattedDescription);
-});
+/* Add Google map */
+$("#mapDiv").append(googleMap);
