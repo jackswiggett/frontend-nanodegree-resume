@@ -186,11 +186,6 @@ education.display();
 work.display();
 projects.display();
 
-/* Log document clicks */
-$(document).click(function(loc) {
-    logClicks(loc.pageX, loc.pageY);
-});
-
 /* Add internationalize button */
 function inName(name) {
     firstAndLast = name.trim().split(" ");
