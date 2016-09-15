@@ -123,17 +123,16 @@ var formattedLocation = HTMLlocation.replace("%data%", bio.contacts.location);
 var formattedBioPic = HTMLbioPic.replace("%data%", bio.biopic);
 var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
 
-$("#header").prepend(formattedRole);
-$("#header").prepend(formattedName);
+$("#header").prepend(formattedName + formattedRole);
 
-$("#topContacts").append(formattedMobile);
-$("#topContacts").append(formattedEmail);
-$("#topContacts").append(formattedGithub);
-$("#topContacts").append(formattedTwitter);
-$("#topContacts").append(formattedLocation);
+$("#topContacts").append(formattedMobile +
+                         formattedEmail +
+                         formattedGithub +
+                         formattedTwitter +
+                         formattedLocation);
 
-$("#header").append(formattedBioPic);
-$("#header").append(formattedWelcomeMsg);
+$("#header").append(formattedBioPic +
+                    formattedWelcomeMsg);
 
 if (bio.skills.length > 0) {
     $("#header").append(HTMLskillsStart);
@@ -142,4 +141,19 @@ if (bio.skills.length > 0) {
 bio.skills.forEach(function(skill) {
     var formattedSkill = HTMLskills.replace("%data%", skill); // TODO sanitize input
     $("#skills").append(formattedSkill);
+});
+
+/* Format and append work history. TODO: Sanitize input from work object. */
+work.jobs.forEach(function(job) {
+    $("#workExperience").append(HTMLworkStart);
+    var formattedEmployer = HTMLworkEmployer.replace("%data%", job.employer);
+    var formattedTitle = HTMLworkTitle.replace("%data%", job.title);
+    var formattedDates = HTMLworkDates.replace("%data%", job.dates);
+    var formattedLocation = HTMLworkLocation.replace("%data%", job.location);
+    var formattedDescription = HTMLworkDescription.replace("%data%", job.description);
+    $(".work-entry:last").append(formattedEmployer +
+                                 formattedTitle +
+                                 formattedDates +
+                                 formattedLocation +
+                                 formattedDescription);
 });
