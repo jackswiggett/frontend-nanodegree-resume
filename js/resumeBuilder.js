@@ -121,11 +121,16 @@ bio.display = function() {
     $("#header").prepend(formatData(HTMLheaderName, bio.name) +
                          formatData(HTMLheaderRole, bio.role));
 
-    $("#topContacts").append(formatData(HTMLmobile, bio.contacts.mobile) +
+    function appendContacts($contact_list) {
+        $contact_list.append(formatData(HTMLmobile, bio.contacts.mobile) +
                              formatData(HTMLemail, bio.contacts.email) +
                              formatData(HTMLgithub, bio.contacts.github) +
                              formatData(HTMLtwitter, bio.contacts.twitter) +
                              formatData(HTMLlocation, bio.contacts.location));
+    }
+
+    appendContacts($("#topContacts"));
+    appendContacts($("#footerContacts"));
 
     $("#header").append(formatData(HTMLbioPic, bio.biopic) +
                         formatData(HTMLwelcomeMsg, bio.welcomeMessage));
@@ -198,7 +203,8 @@ function inName(name) {
     return first + " " + last;
 }
 
-$("#main").append(internationalizeButton)
+/* Internationalize button is commented out for now since it's pretty ugly and rather useless... */
+/* $("#main").append(internationalizeButton) */
 
 /* Add Google map */
 $("#mapDiv").append(googleMap);
